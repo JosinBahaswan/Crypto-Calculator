@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SITEMAP.XML — CryptoCalc
+  Upload file ini ke root domain kamu: https://[DOMAIN]/sitemap.xml
+  Ganti semua [DOMAIN] dengan domain aslimu, contoh: cryptocalc.id
+  Kemudian daftarkan URL sitemap ini di Google Search Console:
+    Search Console → Sitemaps → Add a new sitemap → ketik: sitemap.xml
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Halaman Utama -->
+  <url>
+    <loc>https://[DOMAIN]/</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://[DOMAIN]/"/>
+  </url>
+
+  <!-- Kalkulator Kripto -->
+  <url>
+    <loc>https://[DOMAIN]/crypto-calculator.html</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://[DOMAIN]/crypto-calculator.html"/>
+  </url>
+
+  <!--
+    Tambahkan halaman baru di sini dengan format yang sama.
+    Contoh:
+    <url>
+      <loc>https://[DOMAIN]/halaman-baru.html</loc>
+      <lastmod>2025-01-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+    </url>
+  -->
+
+</urlset>

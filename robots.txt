@@ -1,0 +1,18 @@
+# robots.txt — CryptoCalc
+# Upload ke root domain: https://[DOMAIN]/robots.txt
+# Ganti [DOMAIN] dengan domain aslimu
+
+# Izinkan semua crawler (Google, Bing, dll)
+User-agent: *
+Allow: /
+
+# Blokir folder yang tidak perlu diindex (sesuaikan jika ada)
+# Disallow: /admin/
+# Disallow: /private/
+# Disallow: /*.json$
+
+# Lokasi Sitemap
+Sitemap: https://[DOMAIN]/sitemap.xml
+
+# Crawl-delay opsional (detik) — hilangkan tanda # jika ingin membatasi kecepatan crawler
+# Crawl-delay: 10
