@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoCalc — Kalkulator Kripto</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<icon>₿</icon>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">₿</div>
+    </div>
+    <h1>CryptoCalc</h1>
+    <p class="subtitle">Kalkulator Investasi Kripto</p>
+  </header>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('staking')"><span class="tab-emoji">🔒</span>Staking SOL</button>
+    <button class="tab" onclick="switchTab('dca')"><span class="tab-emoji">📈</span>DCA</button>
+    <button class="tab" onclick="switchTab('pl')"><span class="tab-emoji">💰</span>Profit / Loss</button>
+    <button class="tab" onclick="switchTab('breakeven')"><span class="tab-emoji">⚖️</span>Break Even</button>
+  </div>
+
+  <!-- ===== STAKING ===== -->
+  <div id="panel-staking" class="panel active">
+    <div class="card">
+      <div class="card-title"> Kalkulator Staking Solana</div>
+      <div class="card-desc">Hitung estimasi reward staking SOL berdasarkan APY validator dan periode staking.</div>
+
+      <div class="info-badge"> APY rata-rata Solana saat ini ~6–8% (estimasi)</div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Jumlah SOL</label>
+          <input type="number" id="s-amount" placeholder="Contoh: 100" value="100" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label>Harga SOL (USD)</label>
+          <input type="number" id="s-price" placeholder="Contoh: 150" value="150" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label>APY (%)</label>
+          <input type="number" id="s-apy" placeholder="Contoh: 6.5" value="6.5" min="0" max="100" step="0.1">
+        </div>
+        <div class="field">
+          <label>Periode (Bulan)</label>
+          <input type="number" id="s-period" placeholder="Contoh: 12" value="12" min="1" max="120" step="1">
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom:20px">
+        <label>Compounding</label>
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" id="s-compound" checked>
+            <span class="toggle-track"></span>
+          </label>
+          <label>Auto-compound reward setiap bulan</label>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcStaking()"> Hitung Reward Staking</button>
+
+      <div id="result-staking" class="result-box">
+        <div class="result-header">Hasil Estimasi</div>
+        <div class="result-grid">
+          <div class="result-item">
+            <div class="result-label">Total SOL Akhir</div>
+            <div class="result-value accent" id="r-sol-final">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Reward SOL</div>
+            <div class="result-value" id="r-sol-reward">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Nilai Akhir (USD)</div>
+            <div class="result-value" id="r-usd-final">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Profit (USD)</div>
+            <div class="result-value" id="r-usd-profit">—</div>
+          </div>
+        </div>
+        <div class="result-note" id="r-staking-note"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DCA ===== -->
+  <div id="panel-dca" class="panel">
+    <div class="card">
+      <div class="card-title">DCA — Dollar Cost Averaging</div>
+      <div class="card-desc">Simulasikan pembelian berkala kripto dengan harga yang bervariasi tiap periode.</div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Coin</label>
+          <select id="d-coin">
+            <option value="BTC">Bitcoin (BTC)</option>
+            <option value="ETH">Ethereum (ETH)</option>
+            <option value="SOL" selected>Solana (SOL)</option>
+            <option value="BNB">BNB</option>
+            <option value="Other">Lainnya</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Investasi per Periode (USD)</label>
+          <input type="number" id="d-amount" placeholder="Contoh: 100" value="100" min="1">
+        </div>
+        <div class="field">
+          <label>Harga Awal (USD)</label>
+          <input type="number" id="d-price-start" placeholder="Contoh: 100" value="100" min="0.01" step="0.01">
+        </div>
+        <div class="field">
+          <label>Harga Akhir / Saat Ini (USD)</label>
+          <input type="number" id="d-price-end" placeholder="Contoh: 180" value="180" min="0.01" step="0.01">
+        </div>
+        <div class="field">
+          <label>Jumlah Periode</label>
+          <input type="number" id="d-periods" placeholder="Contoh: 12" value="12" min="2" max="60">
+        </div>
+        <div class="field">
+          <label>Frekuensi</label>
+          <select id="d-freq">
+            <option value="mingguan">Mingguan</option>
+            <option value="bulanan" selected>Bulanan</option>
+            <option value="harian">Harian</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcDCA()">Simulasi DCA</button>
+
+      <div id="result-dca" class="result-box">
+        <div class="result-header">Ringkasan DCA</div>
+        <div class="result-grid">
+          <div class="result-item">
+            <div class="result-label">Total Investasi</div>
+            <div class="result-value accent" id="d-total-inv">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Total Koin Terkumpul</div>
+            <div class="result-value" id="d-total-coin">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Harga Rata-rata Beli</div>
+            <div class="result-value purple" id="d-avg-price">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Nilai Sekarang</div>
+            <div class="result-value" id="d-current-val">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Profit / Loss</div>
+            <div class="result-value" id="d-pnl">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">ROI</div>
+            <div class="result-value" id="d-roi">—</div>
+          </div>
+        </div>
+
+        <div id="dca-table-wrap" class="dca-table-wrap" style="margin-top:20px">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Harga Beli</th>
+                <th>Koin Dibeli</th>
+                <th>Akumulasi Koin</th>
+                <th>Total Invest</th>
+                <th>Nilai Sekarang</th>
+                <th>PnL</th>
+              </tr>
+            </thead>
+            <tbody id="dca-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PROFIT LOSS ===== -->
+  <div id="panel-pl" class="panel">
+    <div class="card">
+      <div class="card-title">Kalkulator Profit / Loss</div>
+      <div class="card-desc">Hitung untung/rugi dari transaksi crypto kamu dengan biaya trading.</div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Harga Beli (USD)</label>
+          <input type="number" id="pl-buy" placeholder="Contoh: 2000" value="2000" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label>Harga Jual / Target (USD)</label>
+          <input type="number" id="pl-sell" placeholder="Contoh: 2800" value="2800" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label>Jumlah Koin</label>
+          <input type="number" id="pl-qty" placeholder="Contoh: 1.5" value="1.5" min="0" step="0.0001">
+        </div>
+        <div class="field">
+          <label>Biaya Trading (%)</label>
+          <input type="number" id="pl-fee" placeholder="Contoh: 0.1" value="0.1" min="0" max="5" step="0.01">
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcPL()">Hitung Profit / Loss</button>
+
+      <div id="result-pl" class="result-box">
+        <div class="result-header">Hasil Kalkulasi</div>
+        <div class="result-grid">
+          <div class="result-item">
+            <div class="result-label">Modal Awal</div>
+            <div class="result-value accent" id="pl-capital">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Nilai Jual Bersih</div>
+            <div class="result-value" id="pl-net-sell">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Biaya Total</div>
+            <div class="result-value warn" id="pl-total-fee">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Profit / Loss</div>
+            <div class="result-value" id="pl-pnl">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">ROI</div>
+            <div class="result-value" id="pl-roi">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Multiplier</div>
+            <div class="result-value purple" id="pl-multiplier">—</div>
+          </div>
+        </div>
+        <div class="result-note" id="pl-note"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BREAK EVEN ===== -->
+  <div id="panel-breakeven" class="panel">
+    <div class="card">
+      <div class="card-title">⚖️ Break Even Price Calculator</div>
+      <div class="card-desc">Cari tahu harga minimum yang harus dicapai agar kamu tidak rugi.</div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Harga Beli Rata-rata (USD)</label>
+          <input type="number" id="be-avg" placeholder="Contoh: 1500" value="1500" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label>Biaya Beli (%)</label>
+          <input type="number" id="be-buy-fee" placeholder="Contoh: 0.1" value="0.1" min="0" max="5" step="0.01">
+        </div>
+        <div class="field">
+          <label>Biaya Jual (%)</label>
+          <input type="number" id="be-sell-fee" placeholder="Contoh: 0.1" value="0.1" min="0" max="5" step="0.01">
+        </div>
+        <div class="field">
+          <label>Target Profit (%)</label>
+          <input type="number" id="be-target" placeholder="Contoh: 20" value="20" min="0" step="0.1">
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom:24px">
+        <label>Leverage (1x = Spot)</label>
+        <div class="slider-wrap">
+          <input type="range" id="be-lev" min="1" max="20" value="1" step="1" oninput="document.getElementById('be-lev-val').textContent = this.value + 'x'">
+          <div class="range-val" id="be-lev-val">1x</div>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcBreakEven()">Hitung Break Even</button>
+
+      <div id="result-be" class="result-box">
+        <div class="result-header">📊 Break Even Analysis</div>
+        <div class="result-grid">
+          <div class="result-item">
+            <div class="result-label">Break Even Price</div>
+            <div class="result-value accent" id="be-price">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Target Jual</div>
+            <div class="result-value" id="be-target-price">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Perlu Naik</div>
+            <div class="result-value purple" id="be-need">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Efektif Profit</div>
+            <div class="result-value" id="be-eff-profit">—</div>
+          </div>
+        </div>
+        <div class="result-note" id="be-note"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Kalkulator ini hanya untuk estimasi &amp; edukasi. Bukan saran investasi.<br>CryptoCalc — All calculations are client-side only.</footer>
+</div>
+
+<script>
+  // ---- TAB SWITCH ----
+  function switchTab(name) {
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      const panels = ['staking','dca','pl','breakeven'];
+      t.classList.toggle('active', panels[i] === name);
+    });
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+  }
+
+  // ---- UTILS ----
+  const fmt = (n, dec=2) => n.toLocaleString('id-ID', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  const fmtUSD = n => '$' + fmt(n, 2);
+  const fmtCoin = (n, sym='') => fmt(n, 4) + (sym ? ' ' + sym : '');
+
+  // ---- STAKING ----
+  function calcStaking() {
+    const amount = parseFloat(document.getElementById('s-amount').value) || 0;
+    const price  = parseFloat(document.getElementById('s-price').value)  || 0;
+    const apy    = parseFloat(document.getElementById('s-apy').value)    || 0;
+    const months = parseFloat(document.getElementById('s-period').value) || 0;
+    const compound = document.getElementById('s-compound').checked;
+
+    if (!amount || !price || !apy || !months) return alert('Isi semua field terlebih dahulu.');
+
+    const apr = apy / 100;
+    let finalSOL;
+
+    if (compound) {
+      const monthlyRate = apr / 12;
+      finalSOL = amount * Math.pow(1 + monthlyRate, months);
+    } else {
+      finalSOL = amount + amount * (apr * months / 12);
+    }
+
+    const rewardSOL    = finalSOL - amount;
+    const initialUSD   = amount * price;
+    const finalUSD     = finalSOL * price;
+    const profitUSD    = finalUSD - initialUSD;
+    const years        = (months / 12).toFixed(2);
+
+    document.getElementById('r-sol-final').textContent  = fmtCoin(finalSOL, 'SOL');
+    document.getElementById('r-sol-reward').textContent = fmtCoin(rewardSOL, 'SOL');
+    document.getElementById('r-usd-final').textContent  = fmtUSD(finalUSD);
+    document.getElementById('r-usd-profit').textContent = fmtUSD(profitUSD);
+    document.getElementById('r-usd-profit').className   = 'result-value ' + (profitUSD >= 0 ? '' : 'warn');
+
+    document.getElementById('r-staking-note').innerHTML =
+      `Modal awal: <b>${fmtUSD(initialUSD)}</b> (${amount} SOL × ${fmtUSD(price)})<br>` +
+      `APY: <b>${apy}%</b> | Periode: <b>${months} bulan (${years} tahun)</b><br>` +
+      `Compounding: <b>${compound ? 'Aktif (bulanan)' : 'Tidak aktif'}</b><br>` +
+      `Reward setara <b>${((rewardSOL / amount) * 100).toFixed(2)}%</b> dari modal awal.`;
+
+    document.getElementById('result-staking').classList.add('show');
+  }
+
+  // ---- DCA ----
+  function calcDCA() {
+    const invest  = parseFloat(document.getElementById('d-amount').value)      || 0;
+    const pStart  = parseFloat(document.getElementById('d-price-start').value) || 0;
+    const pEnd    = parseFloat(document.getElementById('d-price-end').value)   || 0;
+    const periods = parseInt(document.getElementById('d-periods').value)       || 0;
+    const coin    = document.getElementById('d-coin').value;
+    const freq    = document.getElementById('d-freq').value;
+
+    if (!invest || !pStart || !pEnd || !periods) return alert('Isi semua field terlebih dahulu.');
+
+    // Linear price interpolation
+    const prices = [];
+    for (let i = 0; i < periods; i++) {
+      const t = periods === 1 ? 0 : i / (periods - 1);
+      prices.push(pStart + (pEnd - pStart) * t);
+    }
+
+    let totalCoins = 0, totalInvested = 0;
+    const rows = [];
+
+    prices.forEach((p, i) => {
+      const bought = invest / p;
+      totalCoins   += bought;
+      totalInvested += invest;
+      const currentVal = totalCoins * pEnd;
+      const pnl = currentVal - totalInvested;
+      rows.push({ i: i + 1, price: p, bought, totalCoins, totalInvested, currentVal, pnl });
+    });
+
+    const avgPrice   = totalInvested / totalCoins;
+    const currentVal = totalCoins * pEnd;
+    const pnl        = currentVal - totalInvested;
+    const roi        = (pnl / totalInvested) * 100;
+
+    document.getElementById('d-total-inv').textContent   = fmtUSD(totalInvested);
+    document.getElementById('d-total-coin').textContent  = fmtCoin(totalCoins, coin);
+    document.getElementById('d-avg-price').textContent   = fmtUSD(avgPrice);
+    document.getElementById('d-current-val').textContent = fmtUSD(currentVal);
+
+    const pnlEl = document.getElementById('d-pnl');
+    pnlEl.textContent  = (pnl >= 0 ? '+' : '') + fmtUSD(pnl);
+    pnlEl.className    = 'result-value ' + (pnl >= 0 ? '' : 'warn');
+
+    const roiEl = document.getElementById('d-roi');
+    roiEl.textContent = (roi >= 0 ? '+' : '') + roi.toFixed(2) + '%';
+    roiEl.className   = 'result-value ' + (roi >= 0 ? '' : 'warn');
+
+    // Build table
+    const tbody = document.getElementById('dca-tbody');
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${freq === 'harian' ? 'H' : freq === 'mingguan' ? 'M' : 'B'}${r.i}</td>
+        <td>${fmtUSD(r.price)}</td>
+        <td>${r.bought.toFixed(4)}</td>
+        <td>${r.totalCoins.toFixed(4)}</td>
+        <td>${fmtUSD(r.totalInvested)}</td>
+        <td>${fmtUSD(r.currentVal)}</td>
+        <td class="${r.pnl >= 0 ? 'positive' : 'negative'}">${r.pnl >= 0 ? '+' : ''}${fmtUSD(r.pnl)}</td>
+      </tr>
+    `).join('');
+
+    document.getElementById('result-dca').classList.add('show');
+  }
+
+  // ---- PROFIT / LOSS ----
+  function calcPL() {
+    const buyPrice  = parseFloat(document.getElementById('pl-buy').value)  || 0;
+    const sellPrice = parseFloat(document.getElementById('pl-sell').value) || 0;
+    const qty       = parseFloat(document.getElementById('pl-qty').value)  || 0;
+    const fee       = parseFloat(document.getElementById('pl-fee').value)  || 0;
+
+    if (!buyPrice || !sellPrice || !qty) return alert('Isi semua field terlebih dahulu.');
+
+    const capital    = buyPrice * qty;
+    const buyFee     = capital * (fee / 100);
+    const grossSell  = sellPrice * qty;
+    const sellFee    = grossSell * (fee / 100);
+    const totalFees  = buyFee + sellFee;
+    const netSell    = grossSell - sellFee;
+    const pnl        = netSell - capital - buyFee;
+    const roi        = (pnl / (capital + buyFee)) * 100;
+    const multiplier = (sellPrice / buyPrice);
+
+    document.getElementById('pl-capital').textContent     = fmtUSD(capital + buyFee);
+    document.getElementById('pl-net-sell').textContent    = fmtUSD(netSell);
+    document.getElementById('pl-total-fee').textContent   = fmtUSD(totalFees);
+
+    const pnlEl = document.getElementById('pl-pnl');
+    pnlEl.textContent = (pnl >= 0 ? '+' : '') + fmtUSD(pnl);
+    pnlEl.className   = 'result-value ' + (pnl >= 0 ? '' : 'warn');
+
+    const roiEl = document.getElementById('pl-roi');
+    roiEl.textContent = (roi >= 0 ? '+' : '') + roi.toFixed(2) + '%';
+    roiEl.className   = 'result-value ' + (roi >= 0 ? '' : 'warn');
+
+    document.getElementById('pl-multiplier').textContent = multiplier.toFixed(2) + 'x';
+
+    document.getElementById('pl-note').innerHTML =
+      `Beli: <b>${qty} koin × ${fmtUSD(buyPrice)}</b> = ${fmtUSD(capital)} + fee ${fmtUSD(buyFee)}<br>` +
+      `Jual: <b>${qty} koin × ${fmtUSD(sellPrice)}</b> = ${fmtUSD(grossSell)} − fee ${fmtUSD(sellFee)}<br>` +
+      `Net PnL setelah semua biaya: <b>${(pnl >= 0 ? '+' : '') + fmtUSD(pnl)}</b>`;
+
+    document.getElementById('result-pl').classList.add('show');
+  }
+
+  // ---- BREAK EVEN ----
+  function calcBreakEven() {
+    const avg     = parseFloat(document.getElementById('be-avg').value)       || 0;
+    const buyFee  = parseFloat(document.getElementById('be-buy-fee').value)   || 0;
+    const sellFee = parseFloat(document.getElementById('be-sell-fee').value)  || 0;
+    const target  = parseFloat(document.getElementById('be-target').value)    || 0;
+    const lev     = parseInt(document.getElementById('be-lev').value)         || 1;
+
+    if (!avg) return alert('Masukkan harga beli rata-rata.');
+
+    // Cost basis per coin including buy fee
+    const costBasis   = avg * (1 + buyFee / 100);
+    // Break even = sell price so that (sellPrice * (1 - sellFee/100)) = costBasis
+    const breakEven   = costBasis / (1 - sellFee / 100);
+    const neededPct   = ((breakEven - avg) / avg) * 100;
+
+    // Target price for desired profit (with leverage effect)
+    // With leverage: gain% on trade = priceChange% * leverage
+    // Real break even for leveraged = avg + (avg * neededPct/lev) -> simplified
+    const targetPrice = breakEven * (1 + (target / 100) / lev);
+    const effProfit   = target;
+
+    document.getElementById('be-price').textContent         = fmtUSD(breakEven);
+    document.getElementById('be-target-price').textContent  = fmtUSD(targetPrice);
+    document.getElementById('be-need').textContent          = '+' + neededPct.toFixed(3) + '%';
+    document.getElementById('be-eff-profit').textContent    = '+' + effProfit.toFixed(2) + '%';
+
+    document.getElementById('be-note').innerHTML =
+      `Harga beli rata-rata: <b>${fmtUSD(avg)}</b> | Fee beli: <b>${buyFee}%</b> | Fee jual: <b>${sellFee}%</b><br>` +
+      `Leverage: <b>${lev}x</b> | Target profit: <b>${target}%</b><br>` +
+      `Harga harus naik minimal <b>${neededPct.toFixed(3)}%</b> dari harga beli untuk balik modal.<br>` +
+      `Untuk profit <b>${target}%</b>, harga target jual: <b>${fmtUSD(targetPrice)}</b>.`;
+
+    document.getElementById('result-be').classList.add('show');
+  }
+</script>
+</body>
+</html>
