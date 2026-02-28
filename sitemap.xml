@@ -11,20 +11,20 @@
 
   <!-- Halaman Utama -->
   <url>
-    <loc>https://[DOMAIN]/</loc>
+    <loc>https://crypcalc.vercel.app/</loc>
     <lastmod>2025-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="id" href="https://[DOMAIN]/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://crypcalc.vercel.app/"/>
   </url>
 
   <!-- Kalkulator Kripto -->
   <url>
-    <loc>https://[DOMAIN]/crypto-calculator.html</loc>
+    <loc>https://crypcalc.vercel.app/crypto-calculator.html</loc>
     <lastmod>2025-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="id" href="https://[DOMAIN]/crypto-calculator.html"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://crypcalc.vercel.app/crypto-calculator.html"/>
   </url>
 
   <!--

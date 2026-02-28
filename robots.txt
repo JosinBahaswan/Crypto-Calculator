@@ -1,5 +1,5 @@
 # robots.txt — CryptoCalc
-# Upload ke root domain: https://[DOMAIN]/robots.txt
+# Upload ke root domain: https://crypcalc.vercel.app/robots.txt
 # Ganti [DOMAIN] dengan domain aslimu
 
 # Izinkan semua crawler (Google, Bing, dll)
@@ -12,7 +12,7 @@ Allow: /
 # Disallow: /*.json$
 
 # Lokasi Sitemap
-Sitemap: https://[DOMAIN]/sitemap.xml
+Sitemap: https://crypcalc.vercel.app/sitemap.xml
 
 # Crawl-delay opsional (detik) — hilangkan tanda # jika ingin membatasi kecepatan crawler
 # Crawl-delay: 10
